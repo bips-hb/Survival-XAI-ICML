@@ -1,0 +1,16 @@
+# Images and pdf
+*.png
+*.jpeg
+*.jpg
+*.pdf
+*.log
+*.rds
+*.Rds
+
+# Torch models and checkpoints
+*.pt
+
+# Unnecessary folders
+*/__pycache__/*
+.Rproj.user
+.Rhistory
