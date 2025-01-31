@@ -61,7 +61,7 @@ def resize_and_save_images(input_folder, output_folder, size=(256, 256)):
     print("Image resizing and saving completed.")
 
 
-def load_tab_data(tabular_file):
+def load_tab_data(tabular_file, tab_features, out_columns):
     """
     Load the tabular data from a CSV file.
     
@@ -79,8 +79,13 @@ def load_tab_data(tabular_file):
     tabular_data['Survival.months'] = tabular_data['Survival.months'] / 365
     tabular_data['censored'] = tabular_data['censored'].astype(float)
     tabular_data['idh.mutation'] = tabular_data['idh.mutation'].fillna(-1) # Fill missing values with -1
+    tabular_data['codeletion'] = tabular_data['codeletion'].fillna(-1) # Fill missing values with -1
     tabular_data['Age (at index)'] = tabular_data['Age (at index)'] / 100
     print(f"Loaded tabular data with {len(tabular_data)} rows and {len(tabular_data.columns)} columns.")
+    
+    # Remove unnecessary columns
+    tabular_data = tabular_data[tab_features + out_columns + ['TCGA.ID', 'full_path', 'train']]
+    print(f"Selected {len(tabular_data.columns)} columns: {', '.join(tabular_data.columns)}.")
 
     return tabular_data
 
@@ -131,7 +136,7 @@ class CustomDataset(torch.utils.data.Dataset):
 
 # Define multi modal model
 class MultiModalModel(nn.Module):
-    def __init__(self, net_images, tabular_features, n_out = 1, n_img_out = 64, include_time = False):
+    def __init__(self, net_images, tabular_features, n_out = 1, n_img_out = 64, include_time = False, out_bias = False):
         super(MultiModalModel, self).__init__()
         self.net_images = net_images
         if (include_time):
@@ -140,13 +145,13 @@ class MultiModalModel(nn.Module):
             self.fc1 = nn.Linear(n_img_out + len(tabular_features), 256)
         self.fc2 = nn.Linear(256, 128)
         self.relu = nn.ReLU()
-        self.drop_0_3 = nn.Dropout(0.1)
-        self.drop_0_5 = nn.Dropout(0.1)
-        self.out = nn.Linear(128, n_out, bias = False)
+        self.drop_0_3 = nn.Dropout(0.3)
+        self.drop_0_4 = nn.Dropout(0.3)
+        self.out = nn.Linear(128, n_out, bias = out_bias)
 
     def forward(self, img, tab, time = None):
         img = self.net_images(img)
-        img = self.drop_0_5(img)
+        img = self.drop_0_4(img)
 
         if time is not None:
             x = torch.cat((img, tab, time), dim=1)
@@ -154,9 +159,8 @@ class MultiModalModel(nn.Module):
             x = torch.cat((img, tab), dim=1)
         x = self.drop_0_3(x)
         x = self.relu(self.fc1(x))
-        x = self.drop_0_3(x)
+        #x = self.drop_0_3(x)
         x = self.relu(self.fc2(x))
-        x = self.drop_0_3(x)
         x = self.out(x)
 
         return x
