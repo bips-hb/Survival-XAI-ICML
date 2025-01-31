@@ -1,0 +1,2 @@
+Concordance,Integrated Brier score,Number of epochs (warm-up),Number of epochs (full training),Learning rate (warm-up),Learning rate (full training),Number of total instances,Number of training instances,Number of test instances,Number of tabular features,Image size (uncropped),Image size,Number of discrete timepoints,n_img_out,n_out,alpha,out_bias
+0.7133995509380827,0.09199349539546166,80,80,0.001,0.0001,1505,1239,266,4,"(256, 256)","(226, 226)",20,256,20,0.5,True
