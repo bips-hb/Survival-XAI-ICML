@@ -39,28 +39,30 @@ else:
 # Set global variables
 TAB_FEATURES = ['Age (at index)', 'gender', 'idh.mutation', 'codeletion'] #'ethnicity'
 OUT_COLUMNS = ['censored', 'Survival.months']
-IMAGE_SIZE = (256, 256)
-IMAGE_SIZE_CROPPED = (226, 226)
-BATCH_SIZE = 128
+IMAGE_SIZE = (40, 40)
+IMAGE_SIZE_CROPPED = (32, 32)
+BATCH_SIZE = 512
 DEVICE = torch.device(dev)
 
 # Create results folder
-if not os.path.exists('results/deephit'):
-    os.makedirs('results/deephit')
+if not os.path.exists('results/deephit_small'):
+    os.makedirs('results/deephit_small')
 
 # Create checkpoints folder
 if not os.path.exists('checkpoints'):
     os.makedirs('checkpoints')
 
+
 print("------------------------------------------")
 print("|  DeepHit: Multi-modal Survival Model   |")
 print("------------------------------------------")
 
-# Load data and create dataset --------------------------------------------------
-image_dir = 'data/full/'
+# Load data and crate dataset ---------------------------------------------------
+
+image_dir = 'data/small/'
 
 # Load tabular data as a CSV file
-tabular_data = pd.read_csv('data/deephit_tabular_data.csv')
+tabular_data = pd.read_csv('data/deephit_tabular_data_small.csv')
 
 # Show tabular data
 print(tabular_data.head())
@@ -103,11 +105,12 @@ test_ds = CustomDataset(tabular_data[~tabular_data['train']], image_dir + 'test/
 dl_train = torch.utils.data.DataLoader(train_ds, BATCH_SIZE, shuffle=True, collate_fn=collate_fn)
 dl_test = torch.utils.data.DataLoader(test_ds, BATCH_SIZE, shuffle=False, collate_fn=collate_fn)
 
+
 # Define the model --------------------------------------------------------------
-n_img_out = 256
+n_img_out = 128
 
 # Use a ResNet18 model as the image encoder
-net_images = torchvision.models.resnet34(num_classes = n_img_out).to(DEVICE)
+net_images = torchvision.models.resnet18(num_classes = n_img_out).to(DEVICE)
 
 # Create multi-modal model
 model = MultiModalModel(net_images, TAB_FEATURES, n_out = num_durations, n_img_out = n_img_out, out_bias = True).to(DEVICE)
@@ -118,11 +121,12 @@ print('Image encoder architecture: ', net_images.__class__.__name__)
 print('Number of parameters in the image encoder:     {:,.0f}'.format(sum(p.numel() for p in net_images.parameters())))
 print('Number of parameters in the multi-modal model: {:,.0f}'.format(sum(p.numel() for p in model.parameters())))
 
+
 # Create and train survival model ------------------------------------------------
-epochs_warmup = 80
-epochs_full = 80
-lr_warmup = 0.001 #0.0005
-lr_full = 1e-4 #5e-5
+epochs_warmup = 20
+epochs_full = 20
+lr_warmup = 0.005 #0.0005
+lr_full = 1e-3 #5e-5
 alpha = 0.5
 
 print('\n-------- TRAINING --------')
@@ -152,7 +156,7 @@ print('Warm-up rounds complete. Starting full training (max. ', epochs_full, ' e
 
 # Fit the model (full training)
 callbacks = [
-    tt.cb.EarlyStopping(patience=20, file_path='checkpoints/deephit_model.pt'), 
+    tt.cb.EarlyStopping(patience=10, file_path='checkpoints/deephit_small_model.pt'), 
     Concordance(dl_test, per_epoch=1, nn_type = 'deephit')
 ]
 surv_model.optimizer = tt.optim.Adam(lr_full)
@@ -161,14 +165,14 @@ print('Training complete.')
 
 # Save the model (with new serialization, see https://torch.mlverse.org/docs/articles/serialization)
 surv_model.set_device('cpu')
-torch.save(surv_model.net.state_dict(), 'results/deephit/model.pt', _use_new_zipfile_serialization=True)
+torch.save(surv_model.net.state_dict(), 'results/deephit_small/model.pt', _use_new_zipfile_serialization=True)
 surv_model.set_device(DEVICE)
 
 # Show loss plot
 plt.figure(figsize=(12, 6))
 _ = log.plot()
 plt.show()
-plt.savefig('results/deephit/loss.png')
+plt.savefig('results/deephit_small/loss.png')
 
 
 # Evaluation ---------------------------------------------------------------------
@@ -185,7 +189,7 @@ surv.iloc[:, :5].plot()
 plt.ylabel('S(t | x)')
 _ = plt.xlabel('Time')
 plt.show()
-plt.savefig('results/deephit/survival.png')
+plt.savefig('results/deephit_small/survival.png')
 
 # Calculate the concordance index
 ev = EvalSurv(surv, target[0].cpu().detach().numpy(), target[1].cpu().detach().numpy(), censor_surv='km')
@@ -202,7 +206,7 @@ plt.figure(figsize=(12, 6))
 time_grid = np.linspace(0, target[0].max().cpu().detach().numpy(), 200)
 _ = ev.brier_score(time_grid).plot()
 plt.show()
-plt.savefig('results/deephit/brier.png')
+plt.savefig('results/deephit_small/brier.png')
 
 # Calculate the integrated Brier score
 int_brier = ev.integrated_brier_score(time_grid)
@@ -229,4 +233,5 @@ metadata = {
     'out_bias': True
 }
 metadata = pd.DataFrame(metadata, index=[0])
-metadata.to_csv('results/deephit/metadata.csv', index=False)
+metadata.to_csv('results/deephit_small/metadata.csv', index=False)
+
