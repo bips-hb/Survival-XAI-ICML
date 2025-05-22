@@ -25,7 +25,7 @@ if (!require("devtools")) {
 for (pk in required_pks) {
   if (!require(pk, character.only = TRUE)) {
     if (pk == "Survinng") {
-      devtools::install_local("Survinng.zip")
+      devtools::install_github("bips-hb/Survinng")
     } else if (pk == "SurvMetrics") {
       devtools::install_github("skyee1/SurvMetrics")
     } else {

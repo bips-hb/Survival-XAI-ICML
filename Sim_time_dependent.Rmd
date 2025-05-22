@@ -389,9 +389,9 @@ ggsave(fig("sim_td_smoothgradin_plot_norm.pdf"), plot = smoothgradin_plot_norm, 
 ```{r td intgrad0, fig.width=10, fig.height=15}
 # Copute IntegratedGradient with 0 baseline
 x_ref <- matrix(c(0,0,0,0), nrow = 1)
-ig0_cox <- surv_intgrad(exp_coxtime, instance = td_ids, n = 50, x_ref = x_ref, batch_size = 1e6)
-ig0_deephit <- surv_intgrad(exp_deephit, instance = td_ids, n = 50, x_ref = x_ref, batch_size = 1e6)
-ig0_deepsurv <- surv_intgrad(exp_deepsurv, instance = td_ids, n = 50, x_ref = x_ref, batch_size = 1e6)
+ig0_cox <- surv_intgrad(exp_coxtime, instance = td_ids, n = 50, x_ref = x_ref)
+ig0_deephit <- surv_intgrad(exp_deephit, instance = td_ids, n = 50, x_ref = x_ref)
+ig0_deepsurv <- surv_intgrad(exp_deepsurv, instance = td_ids, n = 50, x_ref = x_ref)
 
 # Plot attributions
 intgrad0_plot <- cowplot::plot_grid(
@@ -450,9 +450,9 @@ ggsave(fig("sim_td_intgrad0_plot_force.pdf"), plot = intgrad0_plot_force, width 
 ```{r td intgradmean mean, fig.width=10, fig.height=15}
 # Compute IntegratedGradient with mean baseline
 x_ref <- NULL # default: feature-wise mean
-igm_cox <- surv_intgrad(exp_coxtime, instance = td_ids, n = 50, x_ref = x_ref, batch_size = 1e6)
-igm_deephit <- surv_intgrad(exp_deephit, instance = td_ids, n = 50, x_ref = x_ref, batch_size = 1e6)
-igm_deepsurv <- surv_intgrad(exp_deepsurv, instance = td_ids, n = 50, x_ref = x_ref, batch_size = 1e6)
+igm_cox <- surv_intgrad(exp_coxtime, instance = td_ids, n = 50, x_ref = x_ref)
+igm_deephit <- surv_intgrad(exp_deephit, instance = td_ids, n = 50, x_ref = x_ref)
+igm_deepsurv <- surv_intgrad(exp_deepsurv, instance = td_ids, n = 50, x_ref = x_ref)
 
 # Plot attributions
 intgradmean_plot <- cowplot::plot_grid(
@@ -513,12 +513,9 @@ ggsave(fig("sim_td_intgradmean_plot_force.pdf"), plot = intgradmean_plot_force, 
 
 ```{r td gradshap, fig.width=10, fig.height=15}
 # Compute GradShap
-gshap_cox <- surv_gradSHAP(exp_coxtime, instance = td_ids, n = 50, num_samples = 100, 
-                           batch_size = 1e6)
-gshap_deephit <- surv_gradSHAP(exp_deephit, instance = td_ids, n = 50, num_samples = 100, 
-                           batch_size = 1e6)
-gshap_deepsurv <- surv_gradSHAP(exp_deepsurv, instance = td_ids, n = 50, num_samples = 100, 
-                           batch_size = 1e6)
+gshap_cox <- surv_gradSHAP(exp_coxtime, instance = td_ids, n = 50, num_samples = 100)
+gshap_deephit <- surv_gradSHAP(exp_deephit, instance = td_ids, n = 50, num_samples = 100)
+gshap_deepsurv <- surv_gradSHAP(exp_deepsurv, instance = td_ids, n = 50, num_samples = 100)
 
 # Plot attributions
 gshap_plot <- cowplot::plot_grid(
@@ -598,4 +595,10 @@ gshap_coxtime_plot
 
 # Save plot
 ggsave(fig("main_gshap_coxtime_td.pdf"), plot = gshap_coxtime_plot, width = 10, height = 14)
+```
+
+# Session Info
+
+```{r session info}
+sessionInfo()
 ```

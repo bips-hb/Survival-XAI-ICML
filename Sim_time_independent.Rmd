@@ -184,19 +184,19 @@ res
 
 ### Survival Prediction
 
-```{r tid gradient, fig.width=10, fig.height=15}
+```{r tid pred, fig.width=10, fig.height=15}
 # Print instances of interest
 tid_ids <- c(13, 387)
 print(test[tid_ids, ])
 
 # Compute Vanilla Gradient
-grad_cox <- surv_grad(exp_coxtime, target = "survival", instance = tid_ids, batch_size = 1e6)
-grad_deephit <- surv_grad(exp_deephit, target = "survival", instance = tid_ids, batch_size = 1e6)
-grad_deepsurv <- surv_grad(exp_deepsurv, target = "survival", instance = tid_ids, batch_size = 1e6)
+grad_cox <- surv_grad(exp_coxtime, target = "survival", instance = tid_ids)
+grad_deephit <- surv_grad(exp_deephit, target = "survival", instance = tid_ids)
+grad_deepsurv <- surv_grad(exp_deepsurv, target = "survival", instance = tid_ids)
 
 # Plot survival predictions
 surv_plot <- cowplot::plot_grid(
-  plot_surv_pred(grad_cox) ,
+  plot_surv_pred(grad_cox),
   plot_surv_pred(grad_deephit),
   plot_surv_pred(grad_deepsurv),
   nrow = 3, labels = c("CoxTime", "DeepHit", "DeepSurv"),
@@ -226,7 +226,7 @@ grad_plot
 ggsave(fig("sim_tid_grad_plot.pdf"), plot = grad_plot, width = 10, height = 14)
 ```
 
-```{r tid gradient, fig.width=10, fig.height=15}
+```{r tid gradient norm, fig.width=10, fig.height=15}
 # Plot normalized attributions
 grad_plot_norm <- cowplot::plot_grid(
   plot_attribution(grad_cox, normalize = TRUE, label = "Grad(t)"),
@@ -243,9 +243,9 @@ ggsave(fig("sim_tid_grad_plot_norm.pdf"), plot = grad_plot_norm, width = 10, hei
 
 ```{r tid smoothgrad, fig.width=10, fig.height=15}
 # Compute SmoothGrad
-sg_cox <- surv_smoothgrad(exp_coxtime, target = "survival", instance = tid_ids, n = 50, noise_level = 0.1, batch_size = 1e6)
-sg_deephit <- surv_smoothgrad(exp_deephit, target = "survival", instance = tid_ids, n = 50, noise_level = 0.1, batch_size = 1e6)
-sg_deepsurv <- surv_smoothgrad(exp_deepsurv, target = "survival", instance = tid_ids, n = 50, noise_level = 0.1, batch_size = 1e6)
+sg_cox <- surv_smoothgrad(exp_coxtime, target = "survival", instance = tid_ids, n = 50, noise_level = 0.1)
+sg_deephit <- surv_smoothgrad(exp_deephit, target = "survival", instance = tid_ids, n = 50, noise_level = 0.1)
+sg_deepsurv <- surv_smoothgrad(exp_deepsurv, target = "survival", instance = tid_ids, n = 50, noise_level = 0.1)
 
 # Plot attributions
 smoothgrad_plot <- cowplot::plot_grid(
@@ -259,7 +259,7 @@ smoothgrad_plot
 ggsave(fig("sim_tid_smoothgrad_plot.pdf"), plot = smoothgrad_plot, width = 10, height = 14)
 ```
 
-```{r tid gradient, fig.width=10, fig.height=15}
+```{r tid smoothgrad norm, fig.width=10, fig.height=15}
 # Plot normalized attributions
 smoothgrad_plot_norm <- cowplot::plot_grid(
   plot_attribution(grad_cox, normalize = TRUE, label = "SG(t)"),
@@ -276,9 +276,9 @@ ggsave(fig("sim_tid_smoothgrad_plot_norm.pdf"), plot = smoothgrad_plot_norm, wid
 
 ```{r tid gradientxinput, fig.width=10, fig.height=15}
 # Compute GradientxInput
-gradin_cox <- surv_grad(exp_coxtime, instance = tid_ids, times_input = TRUE, batch_size = 1e6)
-gradin_deephit <- surv_grad(exp_deephit, instance = tid_ids, times_input = TRUE, batch_size = 1e6)
-gradin_deepsurv <- surv_grad(exp_deepsurv, instance = tid_ids, times_input = TRUE, batch_size = 1e6)
+gradin_cox <- surv_grad(exp_coxtime, instance = tid_ids, times_input = TRUE)
+gradin_deephit <- surv_grad(exp_deephit, instance = tid_ids, times_input = TRUE)
+gradin_deepsurv <- surv_grad(exp_deepsurv, instance = tid_ids, times_input = TRUE)
 
 # Plot attributions
 gradin_plot <- cowplot::plot_grid(
@@ -305,7 +305,7 @@ ggsave(fig("sim_tid_grad_gradin_plot.pdf"), plot = grad_gradin_plot, width = 10,
 ```
 
 
-```{r tid gradientxinput, fig.width=10, fig.height=15}
+```{r tid gradientxinput nrom, fig.width=10, fig.height=15}
 # Plot attributions
 gradin_plot_norm <- cowplot::plot_grid(
   plot_attribution(gradin_cox, normalize = TRUE, label = "GxI(t)"), 
@@ -324,11 +324,11 @@ ggsave(fig("sim_tid_gradin_plot_norm.pdf"), plot = gradin_plot_norm, width = 10,
 ```{r tid smoothgradxinput, fig.width=10, fig.height=15}
 # Compute SmoothGradxInput
 sgin_cox <- surv_smoothgrad(exp_coxtime, instance = tid_ids, n = 50, noise_level = 0.3,
-                          times_input = TRUE, , batch_size = 1e6)
+                          times_input = TRUE)
 sgin_deephit <- surv_smoothgrad(exp_deephit, instance = tid_ids, n = 50, noise_level = 0.3,
-                              times_input = TRUE, , batch_size = 1e6)
+                              times_input = TRUE)
 sgin_deepsurv <- surv_smoothgrad(exp_deepsurv, instance = tid_ids, n = 50, noise_level = 0.3,
-                               times_input = TRUE, , batch_size = 1e6)
+                               times_input = TRUE)
 
 # Plot attributions
 smoothgradin_plot <- cowplot::plot_grid(
@@ -342,7 +342,7 @@ smoothgradin_plot
 ggsave(fig("sim_tid_smoothgradin_plot.pdf"), plot = smoothgradin_plot, width = 10, height = 14)
 ```
 
-```{r tid smoothgradxinput, fig.width=10, fig.height=15}
+```{r tid smoothgradxinput norm, fig.width=10, fig.height=15}
 # Plot attributions
 smoothgradin_plot_norm <- cowplot::plot_grid(
   plot_attribution(sgin_cox, normalize = TRUE, label = "SGxI(t)"), 
@@ -362,9 +362,9 @@ ggsave(fig("sim_tid_smoothgradin_plot_norm.pdf"), plot = smoothgradin_plot_norm,
 ```{r tid intgrad0, fig.width=10, fig.height=15}
 # Compute IntegratedGradient with 0 baseline
 x_ref <- matrix(c(0,0,0), nrow = 1)
-ig0_cox <- surv_intgrad(exp_coxtime, instance = tid_ids, n = 50, x_ref = x_ref, batch_size = 1e6)
-ig0_deephit <- surv_intgrad(exp_deephit, instance = tid_ids, n = 50, x_ref = x_ref, batch_size = 1e6)
-ig0_deepsurv <- surv_intgrad(exp_deepsurv, instance = tid_ids, n = 50, x_ref = x_ref, batch_size = 1e6)
+ig0_cox <- surv_intgrad(exp_coxtime, instance = tid_ids, n = 50, x_ref = x_ref)
+ig0_deephit <- surv_intgrad(exp_deephit, instance = tid_ids, n = 50, x_ref = x_ref)
+ig0_deepsurv <- surv_intgrad(exp_deepsurv, instance = tid_ids, n = 50, x_ref = x_ref)
 
 # Plot attributions
 intgrad0_plot <- cowplot::plot_grid(
@@ -378,7 +378,7 @@ intgrad0_plot
 ggsave(fig("sim_tid_intgrad0_plot.pdf"), plot = intgrad0_plot, width = 10, height = 14)
 ```
 
-```{r tid intgrad0, fig.width=10, fig.height=15}
+```{r tid intgrad0 comp, fig.width=10, fig.height=15}
 # Plot attributions
 intgrad0_plot_comp <- cowplot::plot_grid(
   plot_attribution(ig0_cox, add_comp = TRUE, label = "IntGrad(t)"), 
@@ -391,7 +391,7 @@ intgrad0_plot_comp
 ggsave(fig("sim_tid_intgrad0_plot_comp.pdf"), plot = intgrad0_plot_comp, width = 10, height = 14)
 ```
 
-```{r tid intgrad0, fig.width=10, fig.height=15}
+```{r tid intgrad0 contr, fig.width=10, fig.height=15}
 # Plot contributions
 intgrad0_plot_contr <- cowplot::plot_grid(
   plot_contribution(ig0_cox, label = "IntGrad(t)"), 
@@ -404,7 +404,7 @@ intgrad0_plot_contr
 ggsave(fig("sim_tid_intgrad0_plot_contr.pdf"), plot = intgrad0_plot_contr, width = 10, height = 14)
 ```
 
-```{r tid intgrad0, fig.width=10, fig.height=15}
+```{r tid intgrad0 force, fig.width=10, fig.height=15}
 # Plot force
 intgrad0_plot_force <- cowplot::plot_grid(
   plot_force(ig0_cox, upper_distance = 0.04, lower_distance = 0.04, label = "IntGrad(t)"), 
@@ -422,9 +422,9 @@ ggsave(fig("sim_tid_intgrad0_plot_force.pdf"), plot = intgrad0_plot_force, width
 ```{r tid intgradmean, fig.width=10, fig.height=15}
 # Compute IntegratedGradient with mean baseline
 x_ref <- NULL # default: feature-wise mean
-igm_cox <- surv_intgrad(exp_coxtime, instance = tid_ids, n = 50, x_ref = x_ref, batch_size = 1e6)
-igm_deephit <- surv_intgrad(exp_deephit, instance = tid_ids, n = 50, x_ref = x_ref, batch_size = 1e6)
-igm_deepsurv <- surv_intgrad(exp_deepsurv, instance = tid_ids, n = 50, x_ref = x_ref, batch_size = 1e6)
+igm_cox <- surv_intgrad(exp_coxtime, instance = tid_ids, n = 50, x_ref = x_ref)
+igm_deephit <- surv_intgrad(exp_deephit, instance = tid_ids, n = 50, x_ref = x_ref)
+igm_deepsurv <- surv_intgrad(exp_deepsurv, instance = tid_ids, n = 50, x_ref = x_ref)
 
 # Plot attributions
 intgradmean_plot <- cowplot::plot_grid(
@@ -438,7 +438,7 @@ intgradmean_plot
 ggsave(fig("sim_tid_intgradmean_plot.pdf"), plot = intgradmean_plot, width = 10, height = 14)
 ```
 
-```{r tid intgradmean, fig.width=10, fig.height=15}
+```{r tid intgradmean comp, fig.width=10, fig.height=15}
 # Plot attributions
 intgradmean_plot_comp <- cowplot::plot_grid(
   plot_attribution(igm_cox, add_comp = TRUE, label = "IntGrad(t)"), 
@@ -451,7 +451,7 @@ intgradmean_plot_comp
 ggsave(fig("sim_tid_intgradmean_plot_comp.pdf"), plot = intgradmean_plot_comp, width = 10, height = 14)
 ```
 
-```{r tid intgradmean, fig.width=10, fig.height=15}
+```{r tid intgradmean contr, fig.width=10, fig.height=15}
 # Plot contributions
 intgradm_plot_contr <- cowplot::plot_grid(
   plot_contribution(igm_cox, label = "IntGrad(t)"), 
@@ -464,7 +464,7 @@ intgradm_plot_contr
 ggsave(fig("sim_tid_intgradm_plot_contr.pdf"), plot = intgradm_plot_contr, width = 10, height = 14)
 ```
 
-```{r tid intgradmean, fig.width=10, fig.height=15}
+```{r tid intgradmean force, fig.width=10, fig.height=15}
 # Plot force
 intgradm_plot_force <- cowplot::plot_grid(
   plot_force(igm_cox, upper_distance = 0, lower_distance = 0, label = "IntGrad(t)"), 
@@ -482,12 +482,9 @@ ggsave(fig("sim_tid_intgradm_plot_force.pdf"), plot = intgradm_plot_force, width
 
 ```{r tid gradshap, fig.width=10, fig.height=15}
 # Compute GradShap
-gshap_cox <- surv_gradSHAP(exp_coxtime, instance = tid_ids, n = 50, num_samples = 100, 
-                           batch_size = 1e6)
-gshap_deephit <- surv_gradSHAP(exp_deephit, instance = tid_ids, n = 50, num_samples = 100, 
-                           batch_size = 1e6)
-gshap_deepsurv <- surv_gradSHAP(exp_deepsurv, instance = tid_ids, n = 50, num_samples = 100, 
-                           batch_size = 1e6)
+gshap_cox <- surv_gradSHAP(exp_coxtime, instance = tid_ids, n = 50, num_samples = 100)
+gshap_deephit <- surv_gradSHAP(exp_deephit, instance = tid_ids, n = 50, num_samples = 100)
+gshap_deepsurv <- surv_gradSHAP(exp_deepsurv, instance = tid_ids, n = 50, num_samples = 100)
 
 # Plot attributions
 gshap_plot <- cowplot::plot_grid(
@@ -501,7 +498,7 @@ gshap_plot
 ggsave(fig("sim_tid_gshap_plot.pdf"), plot = gshap_plot, width = 10, height = 14)
 ```
 
-```{r tid gradshap, fig.width=10, fig.height=15}
+```{r tid gradshap comp, fig.width=10, fig.height=15}
 # Plot attributions
 gshap_plot_comp <- cowplot::plot_grid(
   plot_attribution(gshap_cox, add_comp = TRUE, label = "GradSHAP(t)"), 
@@ -514,7 +511,7 @@ gshap_plot_comp
 ggsave(fig("sim_tid_gshap_plot_comp.pdf"), plot = gshap_plot_comp, width = 10, height = 14)
 ```
 
-```{r tid gradshap, fig.width=10, fig.height=15}
+```{r tid gradshap contr, fig.width=10, fig.height=15}
 # Plot contributions %
 gshap_plot_contr <- cowplot::plot_grid(
   plot_contribution(gshap_cox, label = "GradSHAP(t)"), 
@@ -527,7 +524,7 @@ gshap_plot_contr
 ggsave(fig("sim_tid_gshap_plot_contr.pdf"), plot = gshap_plot_contr, width = 10, height = 14)
 ```
 
-```{r tid gradshap, fig.width=10, fig.height=15}
+```{r tid gradshap force, fig.width=10, fig.height=15}
 # Plot force
 gshap_plot_force <- cowplot::plot_grid(
   plot_force(gshap_cox, upper_distance = 0, lower_distance = 0, lower_distance_x1 = 0.05, label = "GradSHAP(t)"), 
@@ -540,3 +537,9 @@ gshap_plot_force
 ggsave(fig("sim_tid_gshap_plot_force.pdf"), plot = gshap_plot_force, width = 10, height = 14)
 ```
 
+
+# Session Info
+
+```{r session info}
+sessionInfo()
+```

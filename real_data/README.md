@@ -22,13 +22,13 @@ and was cleaned and preprocessed by
 It is publicly provided in the corresponding repository: 
 [https://github.com/PathologyDataScience/SCNN](https://github.com/PathologyDataScience/SCNN)
 
-- `run_XAI.R`: Applies GradSHAP(t) to the trained *full-sized* model and generates 
-explanation plots used in the manuscript. The results are saved in the folder
-`results/figures/`.
+- `run_realdata_deephit.R`: Applies GradSHAP(t) to the trained *full-sized* model 
+and generates explanation plots used in the manuscript. The resulting plot is saved in the
+upper-level folder `figures_paper/`.
 
-- `run_XAI_small.R`: Applies the GradSHAP(t) and SurvSHAP(t) to a *smaller* (i.e., image size of 32x32) 
-model for runtime benchmarking purpose. The results are saved in the folder
-`results/figures/`.
+- `run_practical_feasibility.R`: Applies the GradSHAP(t) and SurvSHAP(t) to a 
+*smaller* (i.e., image size of 32x32) model for runtime benchmarking purpose. 
+The resulting plot is saved in the upper-level folder `figures_paper/`.
 
 - `results/`: Stores the results, i.e., the trained models and the generated
 explanations.
@@ -68,13 +68,27 @@ scripts `run_DeepHit.py` and `run_DeepHit_small.py`. The models are saved in the
 
 ### Model Explanation
 
-To reproduce the results, you can run the scripts `run_XAI.R` and `run_XAI_small.R`, 
-i.e., run the code:
+To reproduce the results, you can run the scripts `run_realdata.deephit.R` 
+and `run_practical_feasibility.R`. More specifically, run the following code
+to generate Figure 9 of Section 5.2 "Example on Real Multi-modal Medical Data"
+
+```bash
+Rscript run_realdata_deephit.R
 ```
-Rscript run_XAI.R
-Rscript run_XAI_small.R
+and run the following code to start the benchmark for the runtime comparison 
+on smaller images and a smaller DeepHit model:
+
+```bash
+Rscript run_practical_feasibility.R
 ```
-The results are saved in the `results/figures/` folder.
+
+The results are saved in the `results/figures/` folder and the final plots are
+saved in the upper-level folder `figures_paper/`. 
+
+
+**Note:** We also tried to apply SurvSHAP(t) on the full-sized model using the
+script `run_realdata_deephit_survshap.R`. However, it did not complete within 
+one week and used almost 800GB RAM.
 
 ## 📊 Dataset
 

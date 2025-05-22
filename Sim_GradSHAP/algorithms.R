@@ -35,11 +35,12 @@ algo <- function(data, job, instance, hidden_nodes = 32, num_layers = 2,
         calc_lime = calc_lime
       ), show = TRUE)
   }
-  
   torch::torch_set_num_interop_threads(num_cpus)
   torch::torch_set_num_threads(num_cpus)
   
   # Run SurvSHAP
+  set.seed(1)
+  torch::torch_manual_seed(1)
   res_survshap <- lapply(num_samples, run_survshap,
                          extracted_model = res[[1]], 
                          df_test = instance$test,
@@ -48,6 +49,8 @@ algo <- function(data, job, instance, hidden_nodes = 32, num_layers = 2,
   res_survshap <- do.call("rbind", res_survshap)
   
   # Run GradSHAP
+  set.seed(1)
+  torch::torch_manual_seed(1)
   args <- expand.grid(num_samples = num_samples, num_int = num_integration)
   res_gradshap <- lapply(seq_len(nrow(args)), function(i) {
     run_gradshap(extracted_model = res[[1]],
@@ -79,6 +82,7 @@ fit_deephit <- function(instance, hidden_nodes, num_layers, cuts, calc_lime) {
   library(survival)
   source(here::here("utils/utils_survivalmodels.R"))
   reticulate::use_condaenv("Survinng_paper", required = TRUE)
+  here::here("Sim_GradSHAP/limit_cpus.R")
   
   # Set seeds
   set.seed(1)
@@ -114,6 +118,7 @@ fit_deepsurv <- function(instance, hidden_nodes, num_layers, calc_lime) {
   library(survivalmodels)
   library(survival)
   reticulate::use_condaenv("Survinng_paper", required = TRUE)
+  here::here("Sim_GradSHAP/limit_cpus.R")
   
   # Set seeds
   set.seed(1)
@@ -150,6 +155,7 @@ fit_coxtime <- function(instance, hidden_nodes, num_layers, calc_lime) {
   library(survivalmodels)
   library(survival)
   reticulate::use_condaenv("Survinng_paper", required = TRUE)
+  here::here("Sim_GradSHAP/limit_cpus.R")
   
   # Set seeds
   set.seed(1)

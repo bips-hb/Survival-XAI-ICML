@@ -1,1 +1,1 @@
-cluster.functions = makeClusterFunctionsSSH(list(Worker$new("localhost", ncpus = 4)))
+cluster.functions = makeClusterFunctionsSSH(list(Worker$new("localhost", ncpus = 20)))
