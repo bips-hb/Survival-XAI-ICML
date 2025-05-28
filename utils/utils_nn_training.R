@@ -40,7 +40,7 @@ fit_model <- function(model, train, test, num_layers = 2, num_hidden = 32L, cuts
       time = rep(as.numeric(colnames(pred)), each = nrow(pred)),
       id = rep(1:nrow(pred), ncol(pred))
     )
-    list(Survinng::extract_model(model, num_basehazard = num_basehazard), pred = dat)
+    list(survinng::extract_model(model, num_basehazard = num_basehazard), pred = dat)
   }, list(model, train, test, num_layers, num_hidden, cuts, num_basehazard), show = FALSE)
 }
 

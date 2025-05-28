@@ -22,7 +22,7 @@ dir.create(here("Sim_GradSHAP/registries"), showWarnings = FALSE)
 unlink(reg_dir, recursive = TRUE)
 makeExperimentRegistry(file.dir = reg_dir, 
                        conf.file = here("Sim_GradSHAP/config.R"),
-                       packages = c("Survinng", "survex", "survival", "simsurv",
+                       packages = c("survinng", "survex", "survival", "simsurv",
                                     "torch", "survivalmodels", "callr", 
                                     "microbenchmark"),
                        source = c(here("utils/utils_nn_training.R"),

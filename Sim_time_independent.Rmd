@@ -17,7 +17,7 @@ source("setup.R")
 Load the necessary libraries and source the utility functions.
 
 ```{r setup}
-library(Survinng)
+library(survinng)
 library(ggplot2)
 library(cowplot)
 library(dplyr)
@@ -83,9 +83,9 @@ ext_deepsurv <- fit_model("DeepSurv", train, test)
 ## Create Explainer
 
 ```{r tid explainer}
-exp_deephit <- Survinng::explain(ext_deephit[[1]], data = test)
-exp_coxtime <- Survinng::explain(ext_coxtime[[1]], data = test)
-exp_deepsurv <- Survinng::explain(ext_deepsurv[[1]], data = test)
+exp_deephit <- survinng::explain(ext_deephit[[1]], data = test)
+exp_coxtime <- survinng::explain(ext_coxtime[[1]], data = test)
+exp_deepsurv <- survinng::explain(ext_deepsurv[[1]], data = test)
 ```
 
 

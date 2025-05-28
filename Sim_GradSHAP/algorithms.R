@@ -111,7 +111,7 @@ fit_deephit <- function(instance, hidden_nodes, num_layers, cuts, calc_lime) {
     time = rep(as.numeric(colnames(pred)), each = nrow(pred)),
     id = rep(1:nrow(pred), ncol(pred))
   )
-  list(Survinng::extract_model(model), pred = dat, survlime = res)
+  list(survinng::extract_model(model), pred = dat, survlime = res)
 }
 
 fit_deepsurv <- function(instance, hidden_nodes, num_layers, calc_lime) {
@@ -147,7 +147,7 @@ fit_deepsurv <- function(instance, hidden_nodes, num_layers, calc_lime) {
     time = rep(as.numeric(colnames(pred)), each = nrow(pred)),
     id = rep(1:nrow(pred), ncol(pred))
   )
-  list(Survinng::extract_model(model, num_basehazard = 50L), pred = dat, survlime = res)
+  list(survinng::extract_model(model, num_basehazard = 50L), pred = dat, survlime = res)
 }
 
 
@@ -184,7 +184,7 @@ fit_coxtime <- function(instance, hidden_nodes, num_layers, calc_lime) {
     time = rep(as.numeric(colnames(pred)), each = nrow(pred)),
     id = rep(1:nrow(pred), ncol(pred))
   )
-  list(Survinng::extract_model(model, num_basehazard = 50L), pred = dat, survlime = res)
+  list(survinng::extract_model(model, num_basehazard = 50L), pred = dat, survlime = res)
 }
 
 
@@ -194,7 +194,7 @@ fit_coxtime <- function(instance, hidden_nodes, num_layers, calc_lime) {
 # Run SHAP methods
 run_survshap <- function(extracted_model, df_test, num_samples, only_time, n_times = 5L) {
   # Create explainer
-  explainer <- Survinng::explain(extracted_model, data = df_test)
+  explainer <- survinng::explain(extracted_model, data = df_test)
   
   # Run SurvSHAP
   survex_explainer <- to_survex(explainer)
@@ -235,7 +235,7 @@ run_survshap <- function(extracted_model, df_test, num_samples, only_time, n_tim
 run_gradshap <- function(extracted_model, df_test, num_samples, num_integration, 
                          only_time, dtype = "float", n_times = 5L) {
   # Create explainer
-  explainer <- Survinng::explain(extracted_model, data = df_test)
+  explainer <- survinng::explain(extracted_model, data = df_test)
   
   # Run GradSHAP
   time_gradshap <- microbenchmark({

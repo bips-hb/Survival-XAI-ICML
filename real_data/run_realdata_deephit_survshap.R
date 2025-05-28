@@ -4,7 +4,7 @@
 # Note: This part is very very time-consuming and requires a lot of memory!
 #       We aborted this simulation on our workstation after 1 week of runtime
 #       and it took almost 800 GB of RAM.
-library(Survinng)
+library(survinng)
 library(torch)
 library(torchvision)
 library(ggplot2)

@@ -3,7 +3,7 @@
 #     multimodal medical data) in the ICML 2025 paper "Gradient-based 
 #     explanations for Deep Survival Models". 
 ################################################################################
-library(Survinng)
+library(survinng)
 library(torch)
 library(torchvision)
 library(ggplot2)
@@ -60,7 +60,7 @@ data_img <- torch_stack(lapply(data$full_path, function(x) {
 
 # Explain model-----------------------------------------------------------------
 torch_set_num_threads(30L)
-exp_deephit <- Survinng::explain(model, list(data_img, data_tab), 
+exp_deephit <- survinng::explain(model, list(data_img, data_tab), 
                                  model_type = "deephit",
                                  time_bins = seq(0, 17, length.out = n_out))
 

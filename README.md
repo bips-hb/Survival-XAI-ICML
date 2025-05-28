@@ -5,14 +5,14 @@ manuscript "Gradient-based Explanations for Deep Learning Survival Models"
 accepted for publication in the proceedings of the *Forty-Second International 
 Conference on Machine Learning (ICML) 2025*.
 
-The reproduction material is based on the accompanying R package `Survinng`
-available on [github/bips-hb](https://github.com/bips-hb/Survinng).
+The reproduction material is based on the accompanying R package `survinng`
+available on [github/bips-hb](https://github.com/bips-hb/survinng).
 
 ## 📁 Repository Structure
 
 - `setup.R`: R environment setup script that installs required packages,
    the necessary conda environment `Survinng_paper`, and sets global options.
-   It also installs the `Survinng` package from the mentioned GitHub repository.
+   It also installs the `survinng` package from the mentioned GitHub repository.
 - `Sim_time_dependent.Rmd`: Simulation for time-dependent features. The results
    used in the paper are stored in the notebook `Sim_time_dependent.html` and
    figures are saved in the `figures_paper/` directory.
@@ -61,10 +61,10 @@ It installs the following R packages:
 - `survival`
 - `survminer`
 - `SurvMetrics`
-- `Survinng` (from [github/bips-hb](https://github.com/bips-hb/Survinng))
+- `survinng` (from [github/bips-hb](https://github.com/bips-hb/survinng))
 - `survex`
 - `survivalmodels`
-- `torch` (necessary for the `Survinng` package)
+- `torch` (necessary for the `survinng` package)
 
 **Plotting and other useful packages**
 

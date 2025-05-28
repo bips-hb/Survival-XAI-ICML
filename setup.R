@@ -8,7 +8,7 @@
 
 required_pks <- c(
   # Survival packages
-  "simsurv", "survival", "survminer", "SurvMetrics", "Survinng", "survex",
+  "simsurv", "survival", "survminer", "SurvMetrics", "survinng", "survex",
   "survivalmodels",
   
   # Plotting and other useful packages
@@ -25,7 +25,7 @@ if (!require("devtools")) {
 for (pk in required_pks) {
   if (!require(pk, character.only = TRUE)) {
     if (pk == "Survinng") {
-      devtools::install_github("bips-hb/Survinng")
+      devtools::install_github("bips-hb/survinng")
     } else if (pk == "SurvMetrics") {
       devtools::install_github("skyee1/SurvMetrics")
     } else {

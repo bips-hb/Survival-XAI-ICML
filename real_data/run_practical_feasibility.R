@@ -4,7 +4,7 @@
 #     part of the ICML 2025 paper "Gradient-based explanations for
 #     Deep Survival Models".
 ################################################################################
-library(Survinng)
+library(survinng)
 library(torch)
 library(torchvision)
 library(ggplot2)
@@ -83,7 +83,7 @@ orig_img <- base_loader(here(paste0("real_data/data/small/test/", data[ids, ]$fu
 
 # Prepare SurvSHAP explainer ---------------------------------------------------
 # Create explainer
-exp_deephit <- Survinng::explain(model, list(data_img, data_tab), model_type = "deephit",
+exp_deephit <- survinng::explain(model, list(data_img, data_tab), model_type = "deephit",
                                  time_bins = seq(0, 17, length.out = n_out))
 
 
